@@ -1,7 +1,8 @@
 $fn=40;
 
 //[height, width, topOffset, bottomOffset, hookTopDepth, hookBottomDepth, hookType]
-car_param = [70,60,70,50,10,20,"in"];
+vw_golf = [70,60,70,50,10,20,"in"];
+car_param = vw_golf; 
 
 thick=5;
 
