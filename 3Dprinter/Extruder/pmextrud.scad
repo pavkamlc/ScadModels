@@ -1,6 +1,8 @@
-include<Mendel90/scad/vitamins/stepper-motors.scad>;
-include<Mendel90/scad/vitamins/ball-bearings.scad>;
+include<Mendel90/scad/conf/vitamins.scad>;
+//include<Mendel90/scad/vitamins/stepper-motors.scad>;
+//include<Mendel90/scad/vitamins/ball-bearings.scad>;
 include<involute_gears.scad>;
+//include<Mendel90/scad/vitamins/nuts.scad>;
 
 $fn = $preview?20:80;
 
@@ -11,8 +13,8 @@ exwidth = 42;
 exthin = 8;
 //extruder gear length
 exlength = 14;
-
-#translate([0, 0, exthin])rotate([0,180,0])NEMA(NEMA17);
+//fillament
+fillament=1.75;
 
 // motor plate
 difference() {
@@ -28,20 +30,29 @@ difference() {
     union() {
         translate([-exwidth / 2 - 20, -exwidth / 2 - 35, 0]) cube([exwidth, exwidth, exthin]);
         translate([-exwidth / 2 - 20, -exwidth / 2 - 35, 27]) cube([exwidth, exwidth, exthin]);
-        translate([-exwidth / 2 - 20, -exwidth / 2 - 35 , 0]) cube([exthin, exwidth, exlength + exthin + 8]);
-        translate([exwidth / 2 - 20 - exthin, -exwidth / 2 - 35 , 0]) cube([exthin, exwidth, exlength + exthin + 8]);
+        //translate([-exwidth / 2 - 20, -exwidth / 2 - 35 , 0]) cube([exthin, exwidth, exlength + exthin + 8]);
+        //translate([exwidth / 2 - 20 - exthin, -exwidth / 2 - 35 , 0]) cube([exthin, exwidth, exlength + exthin + 8]);
+    // out fillament
+    linear_extrude(height=exlength + exthin + exthin) 
+        translate([1,-38,0]) polygon(points=[[0,0],[0,10],[-20,2],[-20,-2],[0,-10]]);
+    // in fillament
+    linear_extrude(height=exlength + exthin + exthin) 
+        translate([-exwidth + 1,-38,0]) polygon(points=[[0,0],[0,-10],[+20,-2],[20,2],[0,10]]);
     }
-    translate([-20, -35, exthin + 3]) ball_bearing(BB608);
-    translate([-20, -35, exlength + exthin + 5]) ball_bearing(BB608);
-}
-
+    // bearings
     translate([-20, -35, exthin - 1]) ball_bearing(BB608);
     translate([-20, -35, exlength + exthin + exthin - 1 - 1]) ball_bearing(BB608);
-
+    // motor
+    translate([0, 0, exthin])rotate([0,180,0])NEMA(NEMA17);
+    //filament path
+    translate([-50, -38, exlength/2 + exthin + 2]) rotate([0,90,0]) cylinder(100, fillament/2,fillament/2);
+}
 
 // gears
 #translate([0,0,-5]) HelixGear(23,0,8,150);
 #translate([-20,-35,-5]) HelixGear(72,10,8,150);
+
+nut(M8_nut);
 
 module HelixGear ( teeth=17, circles=8, parheight=8, pardimension=170) {
 	//double helical gear
