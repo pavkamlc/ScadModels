@@ -1,8 +1,0 @@
-light_strip_assembly:
-Vitamins:
-  1 Rigid 5050 light strip x 290mm
-
-Printed:
-  1 light_strip_bracket_left.stl
-  1 light_strip_bracket_right.stl
-
