@@ -119,6 +119,9 @@ module extruder_box() {
         // bowden hole
         translate([0.9, -38, 24]) rotate([0,90,0]) metric_bolt(headtype="hex", size=6, l=8);
 
+        // bearing
+        //translate([-20, -45, (exlength+4.5)/2+(exthin)/2+0.5]) bearing(model=608,outline=true);
+
         // extruder gears
         translate([-20, -43, 11.5]) extruder_hole("BMG");
         translate([-20, -33, 11.5]) extruder_hole("BMG");
@@ -130,7 +133,7 @@ module extruder_box() {
     }
 }
 
-//top extruder plate
+// top extruder plate
 module extruder_top() {
     difference() {
         // cube
@@ -148,6 +151,7 @@ module extruder_top() {
     }
 }
 
+// things around
 module jellory() {
     //spring screw down
     translate([-37,-105, exthin + 3]) rotate([90,0,0]) color("lightblue") metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
@@ -217,10 +221,14 @@ module lever() {
                 linear_extrude(height=ex_thin - exthin - exthin - 0.5 - 0.5) 
                     polygon(points=[[0,0],[21,0],[21,8],[3,16],[-3,16],[-21,8],[-21,0]]);
         }
-        //hole
-        translate([-20, -43, 8]) cylinder(20,1.5,1.5);
-        //bearing
-        translate([-20, -45, (exlength+4.5)/2+(exthin)/2+0.5]) bearing(model=608,outline=true);
+        // hole
+        translate([-20, -43, 8]) cylinder(21,1.5,1.5);
+        
+        // bearing
+        //translate([-20, -45, (exlength+4.5)/2+(exthin)/2+0.5]) bearing(model=608,outline=true);
+        // extruder gears
+        translate([-20, -43, 11.5]) extruder_hole("BMG");
+
         //smallscrew
 	    translate([-5,-52,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=2.5, shank=40, l=40);
         screw_variets();
