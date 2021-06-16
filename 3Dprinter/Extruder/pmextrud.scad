@@ -31,7 +31,7 @@ extruder_print();
 // visualize all of extruder
 module extruder_render() {
     color("green") extruder_box();
-    color("orange") extruder_top();
+    color("greenyellow") extruder_top();
     exgearS();
     exgearL();
     jellory();
@@ -45,7 +45,7 @@ module extruder_print() {
     color("green") 
         extruder_box();
 
-    color("orange") translate([-50,20,0])
+    color("greenyellow") translate([-50,20,0])
         extruder_top();
 
     color("darkgreen") translate([50,0,0])
