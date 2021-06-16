@@ -11,8 +11,8 @@ translate([0,0,0]) extruder_hole("BMG");
 //translate([60,0,0]) extruder_gear("MK8");
 
 module extruder_hole(type="MK8") {
-    %cylinder(6,5.5,5.5);
-    %cylinder(15,4.5,4.5);
+    cylinder(6,5.5,5.5);
+    cylinder(15,4.5,4.5);
 }
 
 module extruder_gear(type="MK8", screw = true) {
