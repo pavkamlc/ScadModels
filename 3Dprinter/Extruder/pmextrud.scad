@@ -31,7 +31,7 @@ extruder_print();
 // visualize all of extruder
 module extruder_render() {
     color("green") extruder_box();
-    color("lightred") extruder_top();
+    color("orange") extruder_top();
     exgearS();
     exgearL();
     jellory();
@@ -188,7 +188,7 @@ module jellory() {
 }
 
 // small gear
-module exgearS()
+module exgearS() {
     color("blue") translate([0,0,-5])
         difference() { 
             union(){
@@ -199,6 +199,7 @@ module exgearS()
             translate([0,0,10]) rotate([90,0,0]) cylinder(10,1.5,1.5);
             translate([-2.5,-1-4,6]) cube([5,2,8]);
         }
+}
 
 // big gear
 module exgearL() {
@@ -252,6 +253,7 @@ module distantion() {
     }
 }
 
+// some screws for correct hole
 module screw_variets() {
     //spring screw down
     translate([-37,-105,exthin + 3]) rotate([90,0,0]) metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
@@ -265,6 +267,7 @@ module screw_variets() {
     translate([-37-9,-105, ex_thin - exthin - 3]) rotate([90,0,-7]) metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
 }
 
+// double toothed gear
 module helix_gear(teeth=17, parheight=8, partwist=200) {
 	//double helical gear
 	{
@@ -291,6 +294,7 @@ module helix_gear(teeth=17, parheight=8, partwist=200) {
 	}
 }
 
+// rounded cube
 module rcube(size, radius) {
     hull() {
         // BL
@@ -308,6 +312,7 @@ module rcube(size, radius) {
     }
 }
 
+// faster rendered spring
 module exspring() {
     if($preview) 
         comp_spring(["extruder_spring", 6, 1.5, 30, 10,  1, false, 6, "silver"]);
