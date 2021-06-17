@@ -15,7 +15,8 @@ thick = 5;
 
 translate([-max(width, (width * 3) / 2) - 0.5, 0, 0])
   BikeMountUpper();
-translate([0.5, 0, 0])BikeMountLower();
+translate([0.5, 0, 0])
+  BikeMountLower();
 
 module BikeMountUpper(){
   difference(){
@@ -29,7 +30,6 @@ module BikeMountUpper(){
     translate([width / 2, -15, width / 2 + 8])sphere(4);// bottom point// bottom point
     translate([width / 2, 0, 10])rotate([0, 0, 0])cylinder(r = 1, h = thick * 3, $fn = 50);// central point
   }
-
 }
 
 module BikeMountLower(){

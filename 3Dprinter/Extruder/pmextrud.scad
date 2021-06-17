@@ -25,7 +25,7 @@ exlength = 14;
 //fillament
 fillament=1.75;
 
-//extruder_render();
+*extruder_render();
 extruder_print();
 
 // visualize all of extruder
@@ -37,6 +37,8 @@ module extruder_render() {
     jellory();
     color("darkgreen") lever();
     color("lightgreen") ejector();
+    translate([-20,-35,-2]) distantion();
+    translate([-20,-35,ex_thin+2]) rotate([0,180,0]) distantion();
 }
 
 // prepare parts to print
@@ -59,6 +61,9 @@ module extruder_print() {
     
     color("lightgreen") translate([-40,0,0]) 
         ejector();
+
+    translate([30,-30,0]) distantion();
+    translate([50,-30,0]) distantion();        
 }
 
 // extruder box
@@ -186,9 +191,6 @@ module jellory() {
 
     //color("yellow") translate([-20, -45, (exlength+4.5)/2+(exthin)/2+0.5]) bearing(model=608);
     color("yellow") translate([-20, -43, 11.5]) extruder_gear("BMG");
-
-    translate([-20,-35,-2]) distantion();
-    translate([-20,-35,ex_thin+2]) rotate([0,180,0]) distantion();
 }
 
 // small gear

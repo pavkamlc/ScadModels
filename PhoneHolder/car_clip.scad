@@ -1,3 +1,4 @@
+include <base.scad>
 $fn=100;
 clip_angle=0;
 length=25;
@@ -21,12 +22,9 @@ module car_clip() {
 	difference() {
 		union() {
 			clips();
-			rotate([0,0,clip_angle]) translate([-thick/2,0,12.5]) minkowski() {	
-				cube([thick,plate,width-rounded], center=true);
-				rotate([0,90,0]) cylinder(0.001,rounded);
+			rotate([0,0,clip_angle]) translate([-thick,-plate/2,0]) 
+				rcube([thick,plate,width],[2,2,2,2]);
 			}
-		
-		}
 		translate([-thick, 15, width/2]) sphere(4); // top point
 		translate([-thick, -15, width/2]) sphere(4); // bottom point
 		translate([-thick*2,0,12.5]) rotate([0,90,0]) cylinder(r=0.5,h=thick*3,$fn=50); // central point
