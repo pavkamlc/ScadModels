@@ -14,19 +14,24 @@ use<extrude_gear.scad>;
 $fn = $preview?20:80;
 
 /* [Sizes] */
-//extruder thin
+// extruder thin
 ex_thin = 42;
-//master box size
+// master box size
 motor_size = 42;
-//thin of base
+// thin of base
 exthin = 8;
-//extruder gear length
+// extruder gear length
 exlength = 14;
-//fillament
+// fillament
 fillament=1.75;
+/* [Render] */
+// render mode
+render="print"; // [print,render]
 
-*extruder_render();
-extruder_print();
+if(render=="print")
+    extruder_print();
+else
+    extruder_render();
 
 // visualize all of extruder
 module extruder_render() {
@@ -50,7 +55,7 @@ module extruder_print() {
     color("greenyellow") translate([-50,20,0])
         extruder_top();
 
-    color("darkgreen") translate([50,0,0])
+    color("darkgreen") translate([50,0,0]) rotate([90,0,0])
         lever();
 
     translate([60,0,0]) rotate([180,0,0])
@@ -82,7 +87,7 @@ module extruder_box() {
 
             // optimized base plate for A8
             base_points = [[10,10,10],[-32,10,10],[-45,23,10],[-45,40,10],[2,87,10],[30,87,10],[30,55,10]];
-            translate([0,21+8,0]) rotate([90,0,0]) 
+            translate([0,21+exthin,0]) rotate([90,0,0]) 
                 linear_extrude(height=exthin)
                     rounded_polygon(base_points,rounded_polygon_tangents(base_points));
            
@@ -93,11 +98,11 @@ module extruder_box() {
             translate([-motor_size / 2 - 20, -motor_size / 2 - 35, 0]) rcube([motor_size, motor_size, exthin],[5,5,0,14]);
 
             // out fillament
-            linear_extrude(height=ex_thin) 
+            linear_extrude(height=ex_thin - exthin) 
             translate([1,-38,0]) polygon(points=[[0,0],[0,10],[-20,1],[-20,-1],[0,-10]]);
 
             // in fillament
-            linear_extrude(height=ex_thin) 
+            linear_extrude(height=ex_thin - exthin) 
                 translate([-motor_size + 1,-38,0]) polygon(points=[[0,0],[0,-10],[+20,-1],[20,1],[0,10]]);
         }
 
@@ -108,18 +113,20 @@ module extruder_box() {
 
         // bearing
         translate([-20, -35, -1]) bearing(model=608, outline=true);
-        translate([-20, -35, ex_thin - bearingWidth(model=608) + 1]) bearing(model=608, outline=true);
+        //translate([-20, -35, ex_thin - bearingWidth(model=608) + 1]) bearing(model=608, outline=true);
 
         // motor
-        translate([0, 0, exthin])rotate([0,180,90])nema17_stepper();
+        translate([0, 0, exthin]) rotate([0,180,90]) nema17_stepper();
+        // motor mount holes
+        translate([0, 0, 4]) rotate([0,0,90]) nema17_mount_holes(depth=exthin+1, l=2.5);
 
-        //filament path
+        // filament path
         translate([-50, -38, 24]) rotate([0,90,0]) cylinder(100, fillament/2,fillament/2);
 
-    	//smallscrew
-	    translate([-3,-52,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=2.5, shank=ex_thin+3, l=ex_thin+3);
-        translate([-37,-52,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=2.5, shank=ex_thin+3, l=ex_thin+3);
-        translate([-3,-26,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=2.5, shank=ex_thin+3, l=ex_thin+3);
+    	// smallscrew
+	    translate([-3,-52,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=3, shank=ex_thin+3, l=ex_thin+3);
+        translate([-32,-27,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=3, shank=ex_thin+3, l=ex_thin+3);
+        translate([-3,-26,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=3, shank=ex_thin+3, l=ex_thin+3);
     
         // bowden hole
         translate([0.9, -38, 24]) rotate([0,90,0]) metric_bolt(headtype="hex", size=6, l=8);
@@ -132,7 +139,7 @@ module extruder_box() {
         translate([-20, -33, 11.5]) extruder_hole("BMG");
 
         // axe
-        translate([-20,-35,-5]) rotate([0,0,0]) cylinder(50,2.5,2.5);
+        translate([-20,-35,-5]) rotate([0,0,0]) cylinder(50,3,3);
 
         screw_variets();
     }
@@ -147,21 +154,21 @@ module extruder_top() {
         translate([-20, -35, ex_thin - bearingWidth(model=608) + 1]) bearing(model=608, outline=true);
 
        	// smallscrew
-	    translate([-3,-52,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=2.5, shank=ex_thin+3, l=ex_thin+3);
-        translate([-37,-52,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=2.5, shank=ex_thin+3, l=ex_thin+3);
-        translate([-3,-26,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=2.5, shank=ex_thin+3, l=ex_thin+3);
+	    translate([-3,-52,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=3, shank=ex_thin+3, l=ex_thin+3);
+        translate([-32,-27,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=3, shank=ex_thin+3, l=ex_thin+3);
+        translate([-3,-26,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=3, shank=ex_thin+3, l=ex_thin+3);
 
         // axe
-        translate([-20,-35,-5]) rotate([0,0,0]) cylinder(50,2.5,2.5);
+        translate([-20,-35,-5]) rotate([0,0,0]) cylinder(50,3,3);
     }
 }
 
 // things around
 module jellory() {
     //spring screw down
-    translate([-37,-105, exthin + 3]) rotate([90,0,0]) color("lightblue") metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
+    translate([-37,-105, exthin + 5]) rotate([90,0,0]) color("lightblue") metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
     //sprint screw up
-    translate([-37,-105, ex_thin - exthin - 3]) rotate([90,0,0]) color("lightblue") metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
+    translate([-37,-105, ex_thin - exthin - 5]) rotate([90,0,0]) color("lightblue") metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
 
     // bowden connector
     translate([0, -38, 24]) rotate([0,90,0]) bowden_connector();
@@ -186,8 +193,8 @@ module jellory() {
     translate([-20,-35,-5]) rotate([0,180,0]) metric_bolt(headtype="hex", size=5, shank=ex_thin, l=ex_thin + 20);
 
     // springs
-    translate([-37,-57 - 17.5,11]) rotate([90,0,0]) exspring();
-    translate([-37,-57 - 17.5,31]) rotate([90,0,0]) exspring();
+    translate([-37, -57-17.5, exthin + 5]) rotate([90,0,0]) exspring();
+    translate([-37, -57-17.5, ex_thin - exthin - 5]) rotate([90,0,0]) exspring();
 
     //color("yellow") translate([-20, -45, (exlength+4.5)/2+(exthin)/2+0.5]) bearing(model=608);
     color("yellow") translate([-20, -43, 11.5]) extruder_gear("BMG");
@@ -232,7 +239,7 @@ module lever() {
         translate([-20, -43, 11.5]) extruder_hole("BMG");
 
         //smallscrew
-	    translate([-5,-52,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=2.5, shank=40, l=40);
+	    translate([-5,-52,0]) rotate([180,0,0]) metric_bolt(headtype="hex", size=3, shank=40, l=40);
         screw_variets();
     }
 }
@@ -256,25 +263,25 @@ module ejector() {
 module distantion() {
     difference() {
         union() {
-            cylinder(1,5,5);
-            cylinder(7,3,3);
+            cylinder(2,6,6);
+            cylinder(7,4,4);
         }
-        cylinder(7,1.5,1.5);
+        cylinder(7,2.5,2.5);
     }
 }
 
 // some screws for correct hole
 module screw_variets() {
     //spring screw down
-    translate([-37,-105,exthin + 3]) rotate([90,0,0]) metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
-    translate([-37-3,-105,exthin + 3]) rotate([90,0,-2]) metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
-    translate([-37-6,-105,exthin + 3]) rotate([90,0,-5]) metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
-    translate([-37-9,-105,exthin + 3]) rotate([90,0,-7]) metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
+    translate([-37,-105,exthin + 5]) rotate([90,0,0]) metric_bolt(headtype="hex", size=3, shank=80, l=80);
+    translate([-37-3,-105,exthin + 5]) rotate([90,0,-2]) metric_bolt(headtype="hex", size=3, shank=80, l=80);
+    translate([-37-6,-105,exthin + 5]) rotate([90,0,-5]) metric_bolt(headtype="hex", size=3, shank=80, l=80);
+    translate([-37-9,-105,exthin + 5]) rotate([90,0,-7]) metric_bolt(headtype="hex", size=3, shank=80, l=80);
     //sprint screw up
-    translate([-37,-105, ex_thin - exthin - 3]) rotate([90,0,0]) metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
-    translate([-37-3,-105, ex_thin - exthin - 3]) rotate([90,0,-2]) metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
-    translate([-37-6,-105, ex_thin - exthin - 3]) rotate([90,0,-5]) metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
-    translate([-37-9,-105, ex_thin - exthin - 3]) rotate([90,0,-7]) metric_bolt(headtype="hex", size=2.5, shank=80, l=80);
+    translate([-37,-105, ex_thin - exthin - 5]) rotate([90,0,0]) metric_bolt(headtype="hex", size=3, shank=80, l=80);
+    translate([-37-3,-105, ex_thin - exthin - 5]) rotate([90,0,-2]) metric_bolt(headtype="hex", size=3, shank=80, l=80);
+    translate([-37-6,-105, ex_thin - exthin - 5]) rotate([90,0,-5]) metric_bolt(headtype="hex", size=3, shank=80, l=80);
+    translate([-37-9,-105, ex_thin - exthin - 5]) rotate([90,0,-7]) metric_bolt(headtype="hex", size=3, shank=80, l=80);
 }
 
 // double toothed gear
