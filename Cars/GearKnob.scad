@@ -1,4 +1,4 @@
-$fn = 50;
+$fn = 100;
 
 knob_diameter=50; // dieameter of main sphere
 knob_hole = 12; // diameter of sphere to hole
